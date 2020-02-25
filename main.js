@@ -36,6 +36,7 @@ const crud = {
             if (val.charAt(val.length - 1) !== '' + crud.counter) {
                 //need to know how to change object keys at this line, currently changes index.
                 crud.data[`Index ${crud.counter}`] = crud.data[`${val}`];
+                delete crud.data[`${val}`];
                 crud.counter += 1;
             } else {
                 crud.counter += 1
@@ -51,56 +52,62 @@ function runCrud() {
     let choice = prompt("Would you like to 'c'reate,  'r'ead,  'u'pdate, 'd'elete, 'i'ndex reset, or 'e'xit?");
 
     // ******* Implement Ask For Item Modification Feature *******
-    // Follow-up prompts for CRUD features that require more infomration
-    if (choice === 'c') {
-        let num = prompt('How many items would you like to add?')
-        if (num === '') { num = 1 }
-        for (x = num; x > 0; x--) {
-            let c = prompt('What would you like to add?');
-            c = ` ${c}   `
-            crud.create(c);
-        }
-        runCrud();
+    switch (choice) {
+        case 'c':
+            let num = prompt('How many items would you like to add?')
+            if (num === '') { num = 1 }
+            for (x = num; x > 0; x--) {
+                let c = prompt('What would you like to add?');
+                c = ` ${c}   `
+                crud.create(c);
+            }
+            runCrud();
+            break;
 
-    } else if (choice === 'r') {
-        let r = prompt("What would you like to read? You may specify an index or press enter for all info");
-        if (r === 'a') {
+        case 'r':
+            let r = prompt("What would you like to read? You may specify an index or press enter for all info");
+            if (r === 'a') {
+                alert(crud.read(''));
+            } else if (r >= 0) {
+                alert(crud.read(r));
+            }
+            runCrud();
+            break;
+
+        case 'u':
+            let i = prompt('Please specify an index to update.');
+            let u = prompt(`Please specify what information you would like to add at index ${i}`);
+            crud.update(i, u);
             alert(crud.read(''));
             runCrud();
-        } else if (r >= 0) {
-            alert(crud.read(r));
+            break;
+
+        case 'd':
+            let d = prompt('Please specify the index of the item to be deleted.');
+            crud.delete(d);
+            alert(crud.read(''));
             runCrud();
-        }
+            break;
 
-    } else if (choice === 'u') {
-        let i = prompt('Please specify an index to update.');
-        let u = prompt(`Please specify what information you would like to add at index ${i}`);
-        crud.update(i, u);
-        alert(crud.read(''));
-        runCrud();
+        case null:
+            alert("To exit program please select 'e'xit in the main menu.")
+            runCrud();
+            break;
 
-    } else if (choice === 'd') {
-        let d = prompt('Please specify the index of the item to be deleted.');
-        crud.delete(d);
-        alert(crud.read(''));
-        runCrud();
+        case 'e':
+            alert('Have a great day!')
+            break;
 
-    } else if (choice === null) {
-        alert("To exit program please select 'e'xit in the main menu.")
-        runCrud();
+        case 'i':
+            crud.indexReset();
+            alert(crud.read(''));
+            runCrud();
+            break;
 
-    } else if (choice === 'e') {
-        alert('Have a great day!')
-        return;
+        default:
+            alert('Please select an option.')
+            runCrud();
 
-    } else if (choice === 'i') {
-        alert(crud.read(''));
-        runCrud();
-        return;
-
-    } else {
-        alert('Please select an option.')
-        runCrud();
     }
 }
 //Step 4: Run this program
