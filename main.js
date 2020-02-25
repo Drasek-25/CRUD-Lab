@@ -34,7 +34,6 @@ const crud = {
         const dataKeys = Object.keys(crud.data);
         dataKeys.forEach((val) => {
             if (val.charAt(val.length - 1) !== '' + crud.counter) {
-                //need to know how to change object keys at this line, currently changes index.
                 crud.data[`Index ${crud.counter}`] = crud.data[`${val}`];
                 delete crud.data[`${val}`];
                 crud.counter += 1;
